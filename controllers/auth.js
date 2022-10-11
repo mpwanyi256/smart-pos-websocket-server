@@ -14,11 +14,14 @@ exports.signup = (req, res, next) => {
         throw error;
     }
 
-    const email = req.body.email,
-          password = req.body.password,
-          name = req.body.name;
-
-    bcrypt.hash(password, 12)
+    const { email, password, name } = req.body;
+    
+    User.findOne({ email })
+        .then(foundUser => {
+            console.log('foundUser', foundUser)
+            if (foundUser) throw new Error(`Sorry, ${email} already exists.`)
+            return bcrypt.hash(password, 12)
+        })
         .then(hashedPassword => {
             const user = new User({
                 email,
@@ -30,7 +33,7 @@ exports.signup = (req, res, next) => {
         .then(result => {
             res.status(201).json({
                 message: `New account for ${email} was created`,
-                iser_id: result._id
+                isert_id: result._id
             })
         })
         .catch(err => {
@@ -38,7 +41,8 @@ exports.signup = (req, res, next) => {
                 err.statusCode = 500;
             }
             next(err);
-        })
+        });
+
 };
 
 exports.login = (req, res, next) => {

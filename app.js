@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const multer = require('multer');
 
-const { Server } = require("socket.io");
-
-require('dotenv').config({ path: './.env' })
+// const { Server } = require("socket.io");
+require('dotenv').config()
 
 const feedRoutes = require('./routes/feed');
 const authRoutes = require('./routes/auth');
+const countryRoutes = require('./routes/countries');
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -38,14 +38,17 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
+// TODO :: Refactor Uploads to use Firebase
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(
     multer({ storage: fileStorage, fileFilter })
     .single('image')
 );
 
+// Add Routes
 app.use('/feed', feedRoutes);
 app.use('/auth', authRoutes);
+app.use('/countries', countryRoutes);
 
 app.use((error, req, res, next) => {
     const statusCode = error.statusCode || 500,
@@ -62,13 +65,14 @@ mongoose
     .connect(
         `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@restapiwithmongo.spews.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
     )
-    .then(client => {
-        const server = app.listen(8080);
+    .then(() => {
+        console.log('DB server connected...')
+        const server = app.listen(process.env.PORT);
         const io = require('./socket').init(server);
         io.on('connection', (socket) => {
             console.log('a new user connected');
         });
     })
     .catch(e => {
-        console.log('Failed to connect to server', e);
+        console.log('Failed to connect to server', e.message);
     });
