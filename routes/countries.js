@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const countriesController = require('../controllers/countries');
 const isAuthenticated = require('../middleware/isAuthenticated');
+const validateInput = require('../middleware/validateInput');
 
 const { body } = require('express-validator');
 
@@ -15,6 +16,7 @@ router.put(
             .isEmpty()
     ],
     isAuthenticated,
+    validateInput,
     countriesController.create
 );
 
@@ -27,6 +29,7 @@ router.post(
             .isEmpty()
     ],
     isAuthenticated,
+    validateInput,
     countriesController.getByName
 );
 

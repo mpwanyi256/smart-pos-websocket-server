@@ -1,21 +1,8 @@
 const Country = require('../models/countries');
-const { validationResult } = require('express-validator');
 
-// Checks to see if required inputs are provided
-const validateInput = (req) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        const error = new Error('Validation failed');
-        error.statusCode = 422;
-        error.data = errors.array();
-        throw error;
-    }
-}
 
 // Create a new Supported country
 exports.create = (req, res, next) => {
-    validateInput(req);
 
     const { name } = req.body;
 
@@ -46,7 +33,6 @@ exports.create = (req, res, next) => {
 
 // Get Country
 exports.getByName = (req, res, next) => {
-    validateInput(req);
 
     const { name } = req.body;
 
