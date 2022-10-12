@@ -50,3 +50,37 @@ exports.getByName = (req, res, next) => {
         next(err);
     });
 }
+
+// Returns all countries active countries
+exports.all = (req, res, next) => {
+    Country.find({ status: true })
+        .then(countries => {
+            res.status(200).json({
+                data: countries
+            });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+}
+
+// GET Country By ID
+exports.getById = (req, res, next) => {
+    const countryId = req.params.id;
+
+    Country.findById(countryId)
+        .then(country => {
+            res.status(200).json({
+                data: country
+            });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+}

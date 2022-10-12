@@ -1,24 +1,13 @@
-const { validationResult } = require('express-validator');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.signup = (req, res, next) => {
 
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        const error = new Error('Validation failed');
-        error.statusCode = 422;
-        error.data = errors.array();
-        throw error;
-    }
-
     const { email, password, name } = req.body;
     
     User.findOne({ email })
         .then(foundUser => {
-            console.log('foundUser', foundUser)
             if (foundUser) throw new Error(`Sorry, ${email} already exists.`)
             return bcrypt.hash(password, 12)
         })
@@ -74,7 +63,7 @@ exports.login = (req, res, next) => {
                     id: foundUser._id.toString()
                 },
                 process.env.JWT_SECRET_KEY,
-                { expiresIn: '1h' }
+                { expiresIn: '24h' }
             );
 
             res.status(200).json({

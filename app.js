@@ -10,6 +10,7 @@ require('dotenv').config()
 const feedRoutes = require('./routes/feed');
 const authRoutes = require('./routes/auth');
 const countryRoutes = require('./routes/countries');
+const companyRoutes = require('./routes/company');
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -49,6 +50,7 @@ app.use(
 app.use('/feed', feedRoutes);
 app.use('/auth', authRoutes);
 app.use('/countries', countryRoutes);
+app.use('/company', companyRoutes);
 
 app.use((error, req, res, next) => {
     const statusCode = error.statusCode || 500,

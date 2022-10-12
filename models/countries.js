@@ -6,7 +6,11 @@ const countrySchema = new Schema({
     name: {
         type: String,
         required: true,
+    },
+    status: {
+        type: Boolean,
+        default: true,
     }
-})
+});
 
 module.exports = mongoose.model('Country', countrySchema);

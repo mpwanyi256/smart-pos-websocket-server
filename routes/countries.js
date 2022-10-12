@@ -33,4 +33,7 @@ router.post(
     countriesController.getByName
 );
 
+router.get('/all', countriesController.all);
+router.get('/:id', countriesController.getById);
+
 module.exports = router;

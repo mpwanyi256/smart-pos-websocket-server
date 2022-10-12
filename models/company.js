@@ -12,20 +12,24 @@ const companySchema = new Schema({
         type: String,
         required: true,
     },
-    date_joined: {
-        type: Schema.Types.Date,
-        default: Schema.Types.Date.now,
+    date_created: {
+        type: Date,
+        default: Date.now,
     },
     contact_number: {
         type: String,
         default: ''
     },
-    country: {
+    country_id: {
         type: Schema.Types.ObjectId,
         ref: 'Country',
         required: true,
     },
     business_type: {
+        type: Number,
+        required: true,
+    },
+    package: {
         type: Number,
         required: true,
     },
