@@ -6,6 +6,9 @@ const multer = require('multer');
 const dbConnect = require('./dbConnect');
 const { posApp } = require('./config');
 
+// Main route
+const notify = require('./routes/notify');
+
 require('dotenv').config();
 
 const fileStorage = multer.diskStorage({
@@ -43,7 +46,7 @@ app.use(
 );
 
 // Add Routes
-// app.use('/feed', feedRoutes);
+app.use('/notify', notify);
 // app.use('/auth', authRoutes);
 // app.use('/countries', countryRoutes);
 // app.use('/company', companyRoutes);
@@ -65,18 +68,6 @@ dbConnect(() => {
         console.log(`Server started on port ${posApp.port}`);
     });
     const io = require('./socket').init(server);
-    io.on('connection', (socket) => {
-        console.log('a new user connected');
-    });
-
-    io.on('disconnect', () => {
-        console.log('a user disconnected');
-    });
-
-    io.on('message', (message) => {
-        console.log(message);
-        io.emit('message', message);
-    });
 
     // Handle graceful shutdown
     process.on('SIGINT', async () => {
