@@ -1,7 +1,7 @@
 {
   "name": "blog-app",
   "version": "1.0.0",
-  "description": "A node.Js app for a blog app",
+  "description": "A node.Js websocket server",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
